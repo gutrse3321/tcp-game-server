@@ -54,7 +54,7 @@ func (es *echoServer) Tick() (delay time.Duration, action gnet.Action) {
 
 type ClientArgs struct {
 	Service string
-	Model string
+	Model   string
 }
 
 type Model struct {
@@ -95,7 +95,7 @@ func main() {
 	// Example command: go run push.go --port 9000 --tick 1s --multicore=true
 	flag.IntVar(&port, "port", 9000, "server port")
 	flag.BoolVar(&multicore, "multicore", true, "multicore")
-	flag.DurationVar(&interval, "tick", time.Second * 10, "pushing tick")
+	flag.DurationVar(&interval, "tick", time.Second*10, "pushing tick")
 	flag.Parse()
 	if interval > 0 {
 		ticker = true
