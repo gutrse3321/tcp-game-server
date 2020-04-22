@@ -13,7 +13,7 @@ tcpClient.connect(options, () => {
 
 tcpClient.on("data", data => {
     console.log(new Date() + ": received data: %s from server", data.toString());
-    let str = JSON.stringify({handler: "lobby", service: "GetLobby", model: JSON.stringify({nickName: "tomonori"})});
+    let str = JSON.stringify({handler: "lobby", service: "GetLobby", model: JSON.stringify({nickName: "yuki"})});
     tcpClient.write(str);
 })
 

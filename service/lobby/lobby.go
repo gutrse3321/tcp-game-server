@@ -1,8 +1,10 @@
 package lobby
 
 import (
+	"encoding/json"
 	"github.com/panjf2000/gnet"
 	"log"
+	"reflect"
 )
 
 /**
@@ -12,7 +14,7 @@ import (
  * --- --- ---
  * @Desc:
  */
-type GetLobby struct {
+type Lobby struct {
 	//db    *gorm.DB
 	//redis *redis.Client
 }
@@ -21,11 +23,27 @@ type GetLobby struct {
 //	return &GetLobby{db, redis}
 //}
 
-func NewGetLobby() *GetLobby {
-	return &GetLobby{}
+func NewLobby() *Lobby {
+	return &Lobby{}
 }
 
-func (h *GetLobby) Handle(ctx gnet.Conn, json string) error {
-	log.Println("in handler")
+type Model struct {
+	NickName string
+}
+
+func (h *Lobby) Handle(ctx gnet.Conn, service string, jsonStr []byte) error {
+	params := make([]reflect.Value, 2)
+	params[0] = reflect.ValueOf(ctx)
+	params[1] = reflect.ValueOf(jsonStr)
+
+	valueOf := reflect.ValueOf(h)
+	valueOf.MethodByName(service).Call(params)
 	return nil
+}
+
+func (h *Lobby) GetLobby(ctx gnet.Conn, body []byte) {
+	model := &Model{}
+	json.Unmarshal(body, model)
+	log.Println("in handler:", model.NickName)
+	ctx.AsyncWrite([]byte("handler call:" + model.NickName))
 }

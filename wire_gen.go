@@ -24,8 +24,8 @@ func CreateServer(configPath string) (*server.Server, error) {
 	if err != nil {
 		return nil, err
 	}
-	getLobby := lobby.NewGetLobby()
-	initServicesMap := service.CreateHandlersMap(getLobby)
+	lobbyLobby := lobby.NewGetLobby()
+	initServicesMap := service.CreateHandlersMap(lobbyLobby)
 	serverServer, err := server.New(options, initServicesMap)
 	if err != nil {
 		return nil, err

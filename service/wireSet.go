@@ -14,16 +14,16 @@ import (
  * @Desc:
  */
 var ProviderSet = wire.NewSet(
-	lobby.ProviderSet,
+	lobby.NewLobby,
 	CreateHandlersMap,
 )
 
 func CreateHandlersMap(
-	getLobby *lobby.GetLobby,
+	lobby *lobby.Lobby,
 ) server.InitServicesMap {
 	return func() map[string]server.Handler {
 		funcMap := make(map[string]server.Handler)
-		funcMap["getLobby"] = getLobby
+		funcMap["lobby"] = lobby
 		return funcMap
 	}
 }

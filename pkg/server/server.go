@@ -75,10 +75,11 @@ func (s *TcpServer) Tick() (delay time.Duration, action gnet.Action) {
 }
 
 type Handler interface {
-	Handle(ctx gnet.Conn, json string) error
+	Handle(ctx gnet.Conn, service string, jsonStr []byte) error
 }
 
 type ClientArgs struct {
+	Handler string
 	Service string
 	Model   string
 }
@@ -94,8 +95,8 @@ func (s *TcpServer) React(frame []byte, c gnet.Conn) (out []byte, action gnet.Ac
 			c.AsyncWrite([]byte(fmt.Sprintf("json unmarshal error: %v", err)))
 			return
 		}
-		handler := s.handlers[clientArgs.Service]
-		err = handler.Handle(c, clientArgs.Model)
+		handler := s.handlers[clientArgs.Handler]
+		err = handler.Handle(c, clientArgs.Service, []byte(clientArgs.Model))
 		if err != nil {
 			c.AsyncWrite([]byte(fmt.Sprintf("[error] service: %s, err: %v", clientArgs.Service, err)))
 		}
