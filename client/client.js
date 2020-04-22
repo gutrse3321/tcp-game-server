@@ -9,7 +9,7 @@ let tcpClient = net.Socket();
 
 tcpClient.connect(options, () => {
     console.log("connected to go rpcServer");
-    let str = JSON.stringify({service: "getMyRealName", model: JSON.stringify({nickName: "yuki"})});
+    let str = JSON.stringify({service: "getLobby", model: JSON.stringify({nickName: "yuki"})});
     tcpClient.write(str);
 });
 
@@ -24,6 +24,3 @@ tcpClient.on("end", () => {
 tcpClient.on("error", () => {
     console.log("tcpClient error!");
 })
-
-let str = JSON.stringify({service: "getMyRealName", model: JSON.stringify({nickName: "tomonori"})});
-tcpClient.write(str);

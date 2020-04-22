@@ -5,8 +5,8 @@ import (
 	"github.com/google/wire"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
+	"github.com/prometheus/common/log"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 )
 
 /**
@@ -23,10 +23,11 @@ type Options struct {
 	Db           string
 	MaxIdleConns int
 	MaxOpenConns int
+	SearchUrl    string
 	Debug        bool
 }
 
-func NewOptions(v *viper.Viper, logger *zap.Logger) (*Options, error) {
+func NewOptions(v *viper.Viper) (*Options, error) {
 	var err error
 
 	opt := &Options{}
@@ -34,7 +35,7 @@ func NewOptions(v *viper.Viper, logger *zap.Logger) (*Options, error) {
 		return nil, errors.Wrap(err, "Unmarshal database config error")
 	}
 
-	logger.Info("load database config success", zap.String("host", opt.Host))
+	log.Info("load database config success")
 
 	return opt, err
 }
@@ -43,7 +44,7 @@ func NewOptions(v *viper.Viper, logger *zap.Logger) (*Options, error) {
 初始化连接数据库(mySql)
 */
 func New(opt *Options) (*gorm.DB, error) {
-	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", opt.User, opt.Password, opt.Host, opt.Db))
+	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?%s", opt.User, opt.Password, opt.Host, opt.Db, opt.SearchUrl))
 	if err != nil {
 		return nil, errors.Wrap(err, "gorm open database connection error")
 	}

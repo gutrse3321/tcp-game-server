@@ -5,8 +5,8 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/google/wire"
 	"github.com/pkg/errors"
+	"github.com/prometheus/common/log"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"time"
 )
 
@@ -26,7 +26,7 @@ type Options struct {
 	ExpiredTime int
 }
 
-func NewOptions(v *viper.Viper, logger *zap.Logger) (*Options, error) {
+func NewOptions(v *viper.Viper) (*Options, error) {
 	var err error
 
 	opt := &Options{}
@@ -34,7 +34,7 @@ func NewOptions(v *viper.Viper, logger *zap.Logger) (*Options, error) {
 		return nil, errors.Wrap(err, "Unmarshal redis config error")
 	}
 
-	logger.Info("load redis config success", zap.String("host", opt.Host))
+	log.Info("load redis config success")
 
 	return opt, err
 }
